@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JRCC Student Complaint System</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <!-- ============================= -->
+    <!-- WELCOME SCREEN -->
+    <!-- ============================= -->
+
+    <section id="welcome-screen" class="screen welcome-screen">
+
+        <div class="welcome-card">
+
+            <div class="logo">
+                JRCC
+            </div>
+
+            <h1>Jesus Reigns Christian College</h1>
+
+            <h2>Student Complaint System</h2>
+
+            <p>
+                Your concern deserves to be heard.
+            </p>
+
+            <button class="primary-button" onclick="showScreen('login-screen')">
+                Get Started!
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ============================= -->
+    <!-- LOGIN SCREEN -->
+    <!-- ============================= -->
+
+    <section id="login-screen" class="screen hidden">
+
+        <div class="login-card">
+
+            <div class="small-logo">
+                JRCC
+            </div>
+
+            <h1>Welcome!</h1>
+
+            <p>Sign in to continue</p>
+
+            <label>Student ID</label>
+
+            <input
+                type="text"
+                id="login-student-id"
+                placeholder="Enter your Student ID"
+            >
+
+            <label>Password</label>
+
+            <input
+                type="password"
+                id="login-password"
+                placeholder="Enter your password"
+            >
+
+            <button class="link-button">
+                Forgot Password?
+            </button>
+
+            <button class="primary-button" onclick="login()">
+                LOG IN
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ============================= -->
+    <!-- MAIN APPLICATION -->
+    <!-- ============================= -->
+
+    <section id="app-screen" class="hidden">
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div class="brand">
+
+                <div class="small-logo">
+                    JRCC
+                </div>
+
+                <div>
+                    <strong>JRCC</strong>
+                    <span>STUDENT COMPLAINT SYSTEM</span>
+                </div>
+
+            </div>
+
+            <div class="user-area">
+                🔔
+                <span>🟣 User</span>
+            </div>
+
+        </header>
+
+
+        <div class="layout">
+
+            <!-- ============================= -->
+            <!-- SIDEBAR -->
+            <!-- ============================= -->
+
+            <aside class="sidebar">
+
+                <button onclick="showPage('dashboard-page')">
+                    🏠 Home
+                </button>
+
+                <button onclick="showPage('complaints-page'); loadComplaints()">
+                    📋 Complaints
+                </button>
+
+                <button onclick="showPage('help-page')">
+                    ❓ Help
+                </button>
+
+                <button onclick="showPage('about-page')">
+                    ℹ️ About
+                </button>
+
+            </aside>
+
+
+            <!-- ============================= -->
+            <!-- CONTENT -->
+            <!-- ============================= -->
+
+            <main class="content">
+
+
+                <!-- DASHBOARD -->
+
+                <div id="dashboard-page" class="page">
+
+                    <h2>Good Morning, User! 👋</h2>
+
+                    <p class="subtitle">
+                        How can we help you today?
+                    </p>
+
+
+                    <div class="concern-box">
+
+                        <div>
+                            <h2>Have a concern?</h2>
+
+                            <p>
+                                Tell us what happened.
+                            </p>
+                        </div>
+
+                        <button
+                            class="orange-button"
+                            onclick="showPage('complaint-page')"
+                        >
+                            Submit a Concern
+                        </button>
+
+                    </div>
+
+
+                    <!-- STATISTICS -->
+
+                    <div class="stats">
+
+                        <div class="stat-card">
+                            <h2 id="submitted-count">0</h2>
+                            <p>Submitted</p>
+                        </div>
+
+                        <div class="stat-card">
+                            <h2 id="pending-count">0</h2>
+                            <p>Pending</p>
+                        </div>
+
+                        <div class="stat-card">
+                            <h2 id="resolved-count">0</h2>
+                            <p>Resolved</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="recent-card">
+
+                        <h3>Recent Complaint</h3>
+
+                        <p id="recent-complaint">
+                            No complaints yet.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ============================= -->
+                <!-- COMPLAINT FORM -->
+                <!-- ============================= -->
+
+                <div id="complaint-page" class="page hidden">
+
+                    <button class="back-button"
+                            onclick="showPage('dashboard-page')">
+                        ← Back
+                    </button>
+
+                    <h2>Submit a Complaint</h2>
+
+                    <p class="subtitle">
+                        We're listening. Tell us what happened.
+                    </p>
+
+
+                    <div class="form-card">
+
+                        <label>Category</label>
+
+                        <select id="category">
+
+                            <option value="">
+                                Select a category
+                            </option>
+
+                            <option value="Academic">
+                                Academic
+                            </option>
+
+                            <option value="Facilities">
+                                Facilities
+                            </option>
+
+                            <option value="Student Services">
+                                Student Services
+                            </option>
+
+                            <option value="Faculty">
+                                Faculty
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+
+                        <label>Subject</label>
+
+                        <input
+                            type="text"
+                            id="subject"
+                            placeholder="Briefly describe your concern"
+                        >
+
+
+                        <label>Description</label>
+
+                        <textarea
+                            id="description"
+                            placeholder="Tell us what happened..."
+                        ></textarea>
+
+
+                        <label>Would you like to remain anonymous?</label>
+
+                        <div class="choice-buttons">
+
+                            <button
+                                id="anonymous-yes"
+                                onclick="setAnonymous(true)"
+                            >
+                                Yes
+                            </button>
+
+                            <button
+                                id="anonymous-no"
+                                class="selected"
+                                onclick="setAnonymous(false)"
+                            >
+                                No
+                            </button>
+
+                        </div>
+
+
+                        <label>Attachment (Optional)</label>
+
+                        <input type="file" id="attachment">
+
+
+                        <div class="form-actions">
+
+                            <button
+                                class="cancel-button"
+                                onclick="showPage('dashboard-page')"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                class="orange-button"
+                                onclick="reviewComplaint()"
+                            >
+                                Review
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ============================= -->
+                <!-- REVIEW COMPLAINT -->
+                <!-- ============================= -->
+
+                <div id="review-page" class="page hidden">
+
+                    <button
+                        class="back-button"
+                        onclick="showPage('complaint-page')"
+                    >
+                        ← Back
+                    </button>
+
+                    <h2>Review Your Complaint</h2>
+
+                    <p class="subtitle">
+                        Please check your information before submitting.
+                    </p>
+
+
+                    <div class="review-card">
+
+                        <div class="review-item">
+                            <span>Category</span>
+                            <strong id="review-category"></strong>
+                        </div>
+
+                        <div class="review-item">
+                            <span>Subject</span>
+                            <strong id="review-subject"></strong>
+                        </div>
+
+                        <div class="review-item">
+                            <span>Description</span>
+                            <strong id="review-description"></strong>
+                        </div>
+
+                        <div class="review-item">
+                            <span>Anonymous</span>
+                            <strong id="review-anonymous"></strong>
+                        </div>
+
+
+                        <div class="form-actions">
+
+                            <button
+                                class="cancel-button"
+                                onclick="showPage('complaint-page')"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                class="orange-button"
+                                onclick="submitComplaint()"
+                            >
+                                Submit
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ============================= -->
+                <!-- SUBMITTED PAGE -->
+                <!-- ============================= -->
+
+                <div id="submitted-page" class="page hidden">
+
+                    <div class="success-card">
+
+                        <div class="success-icon">
+                            ✓
+                        </div>
+
+                        <h2>Complaint Submitted!</h2>
+
+                        <p>
+                            Thank you for letting us know.
+                        </p>
+
+                        <p>
+                            Your concern has been recorded.
+                        </p>
+
+                        <div class="reference-box">
+
+                            <span>Reference Number</span>
+
+                            <strong id="reference-number">
+                                -
+                            </strong>
+
+                        </div>
+
+                        <div class="form-actions">
+
+                            <button
+                                class="orange-button"
+                                onclick="showPage('complaints-page'); loadComplaints()"
+                            >
+                                View Complaint
+                            </button>
+
+                            <button
+                                class="cancel-button"
+                                onclick="showPage('dashboard-page')"
+                            >
+                                Back to Dashboard
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ============================= -->
+                <!-- MY COMPLAINTS -->
+                <!-- ============================= -->
+
+                <div id="complaints-page" class="page hidden">
+
+                    <h2>My Complaints</h2>
+
+                    <p class="subtitle">
+                        Track your submitted concerns.
+                    </p>
+
+
+                    <div class="filter-buttons">
+                        <button onclick="filterComplaints('All')">
+                            All
+                        </button>
+
+                        <button onclick="filterComplaints('Pending')">
+                            Pending
+                        </button>
+
+                        <button onclick="filterComplaints('In Progress')">
+                            In Progress
+                        </button>
+
+                        <button onclick="filterComplaints('Resolved')">
+                            Resolved
+                        </button>
+                    </div>
+
+
+                    <div id="complaints-list">
+
+                        <p>
+                            Loading complaints...
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ============================= -->
+                <!-- HELP -->
+                <!-- ============================= -->
+
+                <div id="help-page" class="page hidden">
+
+                    <h2>Help Center</h2>
+
+                    <p class="subtitle">
+                        How can we help?
+                    </p>
+
+
+                    <div class="help-card">
+
+                        <details>
+                            <summary>
+                                How do I submit a complaint?
+                            </summary>
+
+                            <p>
+                                Go to Home and click Submit a Concern.
+                                Fill out the form and submit your complaint.
+                            </p>
+                        </details>
+
+
+                        <details>
+                            <summary>
+                                How do I track my complaint?
+                            </summary>
+
+                            <p>
+                                Open the Complaints section to view
+                                your submitted concerns and their status.
+                            </p>
+                        </details>
+
+
+                        <details>
+                            <summary>
+                                Can I submit anonymously?
+                            </summary>
+
+                            <p>
+                                Yes. Select Yes under the anonymous option
+                                when submitting your complaint.
+                            </p>
+                        </details>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- ============================= -->
+                <!-- ABOUT -->
+                <!-- ============================= -->
+
+                <div id="about-page" class="page hidden">
+
+                    <h2>About</h2>
+
+                    <div class="about-card">
+
+                        <h2>
+                            JRCC Student Complaint System
+                        </h2>
+
+                        <p>
+                            A system designed to help students submit,
+                            monitor, and manage their concerns.
+                        </p>
+
+                        <p>
+                            Your concern deserves to be heard.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </main>
+
+        </div>
+
+    </section>
+
+
+    <script src="/static/app.js"></script>
+
+</body>
+
+</html>
